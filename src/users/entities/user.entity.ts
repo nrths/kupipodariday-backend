@@ -29,14 +29,14 @@ export class User extends CommonEntityFields {
   @IsUrl()
   public avatar: string;
 
-  @Column({ unique: true, select: false })
+  @Column({ unique: true })
   @IsEmail()
   @IsNotEmpty()
   public email: string;
 
   @IsNotEmpty()
   @MinLength(6)
-  @Column({ select: false })
+  @Column()
   public password: string;
 
   @OneToMany(() => Wish, (wish) => wish.owner)

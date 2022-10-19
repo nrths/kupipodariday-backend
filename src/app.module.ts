@@ -1,14 +1,15 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppService } from './app.service';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
+// import { AppService } from './app.service';
 import { User } from './users/entities/user.entity';
 import { UsersModule } from './users/users.module';
 import { WishesModule } from './wishes/wishes.module';
 import { WishlistsModule } from './wishlists/wishlists.module';
 import { OffersModule } from './offers/offers.module';
 import config from './config/config';
+import { AuthModule } from './auth/auh.module';
 
 @Module({
   imports: [
@@ -19,8 +20,7 @@ import config from './config/config';
       username: config().db.username,
       password: config().db.password,
       database: config().db.databaseName,
-      entities: [User],
-      logging: true,
+      autoLoadEntities: true,
       synchronize: true,
     }),
     ConfigModule.forRoot({
@@ -30,8 +30,9 @@ import config from './config/config';
     WishesModule,
     WishlistsModule,
     OffersModule,
+    AuthModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [],
 })
 export class AppModule {}

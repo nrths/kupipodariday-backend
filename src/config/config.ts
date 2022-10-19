@@ -8,4 +8,5 @@ export default () => ({
     password: 'student',
     databaseName: 'kupipodariday',
   },
+  JWT_Secret: 'JWT_Secret',
 });

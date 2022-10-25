@@ -17,7 +17,7 @@ export class Wishlist extends CommonEntityFields {
   @Length(1, 250)
   public name: string;
 
-  @Column()
+  @Column({ nullable: true })
   @IsOptional()
   @MaxLength(1500)
   public description: string;
@@ -29,7 +29,10 @@ export class Wishlist extends CommonEntityFields {
 
   @ManyToMany(() => Wish)
   @JoinTable()
-  items: Wish[];
+  public items: Wish[];
+
+  @IsOptional()
+  public itemsId: number[];
 
   @ManyToOne(() => User, (user) => user.wishlists)
   public owner: User;

@@ -1,10 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateWishDto } from './dto/create-wish.dto';
 import { UpdateWishDto } from './dto/update-wish.dto';
 import { Wish } from '../wishes/entities/wish.entity';
 import { User } from '../users/entities/user.entity';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { FindManyOptions, Repository } from 'typeorm';
 
 @Injectable()
 export class WishesService {
@@ -21,9 +21,20 @@ export class WishesService {
     return wish;
   }
 
-  // findWishById(id: number) {
-  //   return `This action returns a #${id} wish`;
-  // }
+  async findWishById(id: number) {
+    const wish = await this.wishesRepository.findOne({
+      relations: {
+        owner: { wishes: true, wishlists: true, offers: true },
+        offers: { user: true },
+      },
+      where: { id },
+    });
+    if (!wish) {
+      throw new NotFoundException('Такого подарка не существует.');
+    }
+
+    return wish;
+  }
 
   findWishesByOwner(ownerId: number): Promise<Wish[]> {
     return this.wishesRepository.find({
@@ -32,19 +43,26 @@ export class WishesService {
     });
   }
 
-  // updateWish(id: number, updateWishDto: UpdateWishDto) {
-  //   return `This action updates a #${id} wish`;
-  // }
+  async findMany(wishesIds: FindManyOptions<Wish>): Promise<Wish[]> {
+    return await this.wishesRepository.find(wishesIds);
+  }
 
-  // removeWish(id: number) {
-  //   return `This action removes a #${id} wish`;
-  // }
+  updateWish(id: number, updateWishDto: UpdateWishDto) {
+    return this.wishesRepository.update(id, updateWishDto);
+  }
 
-  // async findTopWishes(): Promise<Wish[]> {
-  //   return "take: 20, copied"
-  // }
+  removeWish(id: number) {
+    return this.wishesRepository.delete({ id });
+  }
 
-  // async findLastWishes(): Promise<Wish[]> {
-  //   return "take: 40, createdAt"
-  // }
+  async findTopWishes(): Promise<Wish[]> {
+    return this.wishesRepository.find({ take: 20, order: { copied: 'DESC' } });
+  }
+
+  async findLastWishes(): Promise<Wish[]> {
+    return this.wishesRepository.find({
+      take: 40,
+      order: { createdAt: 'DESC' },
+    });
+  }
 }

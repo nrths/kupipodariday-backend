@@ -27,13 +27,11 @@ export class Wishlist extends CommonEntityFields {
   @IsUrl()
   public image: string;
 
-  @ManyToMany(() => Wish)
-  @JoinTable()
-  public items: Wish[];
-
-  @IsOptional()
-  public itemsId: number[];
-
   @ManyToOne(() => User, (user) => user.wishlists)
   public owner: User;
+
+  @ManyToMany(() => Wish)
+  @JoinTable()
+  @IsOptional()
+  public items: Wish[];
 }

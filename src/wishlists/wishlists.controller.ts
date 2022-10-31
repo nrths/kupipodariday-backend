@@ -16,6 +16,7 @@ import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
 import { JwtGuard } from '../auth/jwt/jwt.guard';
 import { Wishlist } from './entities/wishlist.entity';
+// import { WishesService } from '../wishes/wishes.service';
 
 @Controller('wishlists')
 export class WishlistsController {
@@ -46,24 +47,24 @@ export class WishlistsController {
     return wishlist;
   }
 
-  // @UseGuards(JwtGuard)
-  // @Patch(':id')
-  // public async update(
-  //   @Req() req,
-  //   @Param('id') id: number,
-  //   @Body() updateWishlistDto: UpdateWishlistDto,
-  // ) {
-  //   const wishlist = await this.wishlistsService.findById(id);
-  //   if (!wishlist) {
-  //     throw new NotFoundException('Такого списка не существует.');
-  //   }
-  //   if (wishlist.owner.id === req.user.id) {
-  //     await this.wishlistsService.update(id, updateWishlistDto);
-  //     return { ...wishlist };
-  //   } else {
-  //     throw new ForbiddenException({ message: 'Действие недоступно' });
-  //   }
-  // }
+  @UseGuards(JwtGuard)
+  @Patch(':id')
+  public async update(
+    @Req() req,
+    @Param('id') id: string,
+    @Body() updateWishlistDto: UpdateWishlistDto,
+  ) {
+    const wishlist = await this.wishlistsService.findById(+id);
+    if (!wishlist) {
+      throw new NotFoundException('Такого списка не существует.');
+    }
+    if (wishlist.owner.id === req.user.id) {
+      await this.wishlistsService.update(+id, updateWishlistDto);
+      return;
+    } else {
+      throw new ForbiddenException({ message: 'Действие недоступно' });
+    }
+  }
 
   @UseGuards(JwtGuard)
   @Delete(':id')

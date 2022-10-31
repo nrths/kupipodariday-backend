@@ -6,6 +6,7 @@ import { User } from '../users/entities/user.entity';
 import { WishesService } from '../wishes/wishes.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
+// import { Wish } from '../wishes/entities/wish.entity';
 
 @Injectable()
 export class WishlistsService {
@@ -38,9 +39,12 @@ export class WishlistsService {
     });
   }
 
-  // public async update(id: number, updateWishlistDto: UpdateWishlistDto) {
-  //   return await this.wishlistsRepository.update(id, updateWishlistDto);
-  // }
+  public async update(
+    id: number,
+    updateWishlistDto: UpdateWishlistDto,
+  ): Promise<any> {
+    return await this.wishlistsRepository.update(id, updateWishlistDto);
+  }
 
   public async remove(id: number) {
     return this.wishlistsRepository.delete(id);

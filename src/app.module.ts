@@ -10,6 +10,9 @@ import { WishlistsModule } from './wishlists/wishlists.module';
 import { OffersModule } from './offers/offers.module';
 import config from './config/config';
 import { AuthModule } from './auth/auh.module';
+import { Wish } from './wishes/entities/wish.entity';
+import { Wishlist } from './wishlists/entities/wishlist.entity';
+import { Offer } from './offers/entities/offer.entity';
 
 @Module({
   imports: [
@@ -20,7 +23,8 @@ import { AuthModule } from './auth/auh.module';
       username: config().db.username,
       password: config().db.password,
       database: config().db.databaseName,
-      autoLoadEntities: true,
+      // autoLoadEntities: true,
+      entities: [User, Wish, Wishlist, Offer],
       synchronize: true,
     }),
     ConfigModule.forRoot({

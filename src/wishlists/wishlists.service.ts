@@ -1,27 +1,27 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Repository } from 'typeorm';
+import { Repository } from 'typeorm';
 import { Wishlist } from './entities/wishlist.entity';
 import { User } from '../users/entities/user.entity';
-import { WishesService } from '../wishes/wishes.service';
 import { CreateWishlistDto } from './dto/create-wishlist.dto';
 import { UpdateWishlistDto } from './dto/update-wishlist.dto';
-// import { Wish } from '../wishes/entities/wish.entity';
+import { Wish } from '../wishes/entities/wish.entity';
 
 @Injectable()
 export class WishlistsService {
   constructor(
     @InjectRepository(Wishlist)
     private readonly wishlistsRepository: Repository<Wishlist>,
-    private readonly wishesService: WishesService,
   ) {}
 
-  public async create(user: User, createWishlistDto: CreateWishlistDto) {
-    const wishes = await this.wishesService.findMany({
-      where: { id: In(createWishlistDto.itemsId || []) },
-    });
+  public async create(
+    user: User,
+    createWishlistDto: CreateWishlistDto,
+  ): Promise<Wishlist> {
+    const { itemsId, ...rest } = createWishlistDto;
+    const wishes = itemsId.map((id: number) => ({ id } as Wish));
     const wishlist = this.wishlistsRepository.create({
-      ...createWishlistDto,
+      ...rest,
       owner: user,
       items: wishes,
     });
@@ -39,11 +39,20 @@ export class WishlistsService {
     });
   }
 
-  public async update(
+  public async updateWishlist(
     id: number,
     updateWishlistDto: UpdateWishlistDto,
-  ): Promise<any> {
-    return await this.wishlistsRepository.update(id, updateWishlistDto);
+    user: User,
+  ): Promise<Wishlist> {
+    const { itemsId, ...rest } = updateWishlistDto;
+    const wishlist = await this.findById(id);
+    await this.wishlistsRepository.update(id, rest);
+    wishlist.items = itemsId.map((id: number) => ({ id } as Wish));
+    return await this.wishlistsRepository.save({
+      ...rest,
+      owner: user,
+      items: wishlist.items,
+    });
   }
 
   public async remove(id: number) {

@@ -49,18 +49,21 @@ export class WishlistsController {
 
   @UseGuards(JwtGuard)
   @Patch(':id')
-  public async update(
+  public async updateWishlist(
     @Req() req,
-    @Param('id') id: string,
+    @Param('id') id: number,
     @Body() updateWishlistDto: UpdateWishlistDto,
   ) {
-    const wishlist = await this.wishlistsService.findById(+id);
+    const wishlist = await this.wishlistsService.findById(id);
     if (!wishlist) {
       throw new NotFoundException('Такого списка не существует.');
     }
     if (wishlist.owner.id === req.user.id) {
-      await this.wishlistsService.update(+id, updateWishlistDto);
-      return;
+      return await this.wishlistsService.updateWishlist(
+        id,
+        updateWishlistDto,
+        req.user,
+      );
     } else {
       throw new ForbiddenException({ message: 'Действие недоступно' });
     }

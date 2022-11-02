@@ -36,8 +36,8 @@ export class OffersService {
       user,
       item: wish,
     });
-    const savedOffer = await this.offersRepository.save(offer);
-    return savedOffer;
+
+    return await this.offersRepository.save(offer);
   }
 
   public async findAll(): Promise<Offer[]> {

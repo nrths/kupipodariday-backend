@@ -15,23 +15,25 @@ export class Wishlist extends CommonEntityFields {
   @Column()
   @IsNotEmpty()
   @Length(1, 250)
-  public name: string;
+  name: string;
 
   @Column({ nullable: true })
   @IsOptional()
   @MaxLength(1500)
-  public description: string;
+  description: string;
 
   @Column({ default: 'https://i.pravatar.cc' })
-  @IsNotEmpty()
+  @IsOptional()
   @IsUrl()
-  public image: string;
+  image: string;
 
   @ManyToOne(() => User, (user) => user.wishlists)
-  public owner: User;
+  owner: User;
 
   @ManyToMany(() => Wish)
   @JoinTable()
   @IsOptional()
-  public items: Wish[];
+  items: Wish[];
+
+  itemsId: number[];
 }

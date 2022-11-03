@@ -1,4 +1,4 @@
-import { CommonEntityFields } from '../../utils/CommonEntityFields';
+import { BaseEntity } from '../../utils/entities/BaseEntity';
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne } from 'typeorm';
 import {
   IsNotEmpty,
@@ -11,7 +11,7 @@ import { Wish } from '../../wishes/entities/wish.entity';
 import { User } from '../../users/entities/user.entity';
 
 @Entity()
-export class Wishlist extends CommonEntityFields {
+export class Wishlist extends BaseEntity {
   @Column()
   @IsNotEmpty()
   @Length(1, 250)
@@ -34,6 +34,4 @@ export class Wishlist extends CommonEntityFields {
   @JoinTable()
   @IsOptional()
   items: Wish[];
-
-  itemsId: number[];
 }

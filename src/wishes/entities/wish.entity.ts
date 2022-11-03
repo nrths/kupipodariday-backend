@@ -1,17 +1,18 @@
 import {
   IsEmpty,
+  IsInt,
   IsNotEmpty,
   IsOptional,
   IsUrl,
   Length,
 } from 'class-validator';
-import { CommonEntityFields } from '../../utils/CommonEntityFields';
+import { BaseEntity } from '../../utils/entities/BaseEntity';
 import { User } from '../../users/entities/user.entity';
 import { Offer } from '../../offers/entities/offer.entity';
-import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm'; // OneToMany
+import { Entity, Column, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 
 @Entity()
-export class Wish extends CommonEntityFields {
+export class Wish extends BaseEntity {
   @Column()
   @IsNotEmpty()
   @Length(1, 250)
@@ -50,5 +51,6 @@ export class Wish extends CommonEntityFields {
   public offers: Offer[];
 
   @Column({ default: 0, nullable: true })
+  @IsInt()
   public copied: number;
 }

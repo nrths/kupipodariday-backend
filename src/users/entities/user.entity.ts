@@ -7,14 +7,14 @@ import {
   Length,
   MinLength,
 } from 'class-validator';
-import { CommonEntityFields } from '../../utils/CommonEntityFields';
+import { BaseEntity } from '../../utils/entities/BaseEntity';
 import { Entity, Column, OneToMany } from 'typeorm';
 import { Wish } from '../../wishes/entities/wish.entity';
 import { Wishlist } from '../../wishlists/entities/wishlist.entity';
 import { Offer } from '../../offers/entities/offer.entity';
 
 @Entity()
-export class User extends CommonEntityFields {
+export class User extends BaseEntity {
   @Column({ unique: true })
   @IsNotEmpty()
   @Length(2, 30)
@@ -29,7 +29,7 @@ export class User extends CommonEntityFields {
   @IsUrl()
   avatar: string;
 
-  @Column({ unique: true }) // , select: false
+  @Column({ unique: true })
   @IsEmail()
   @IsNotEmpty()
   email: string;

@@ -56,7 +56,7 @@ export class WishesService {
   }
 
   async findTopWishes(): Promise<Wish[]> {
-    return this.wishesRepository.find({ take: 20, order: { copied: 'DESC' } });
+    return this.wishesRepository.find({ take: 10, order: { copied: 'DESC' } });
   }
 
   async findLastWishes(): Promise<Wish[]> {

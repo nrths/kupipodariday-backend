@@ -6,7 +6,7 @@ import {
 } from 'typeorm';
 
 @Entity()
-export abstract class CommonEntityFields {
+export abstract class BaseEntity {
   @PrimaryGeneratedColumn()
   public id: number;
 

@@ -50,6 +50,7 @@ GRANT ALL PRIVILEGES ON DATABASE kupipodariday TO student;
 ```bash
   npm run start:dev
 ```
+Для проверки работоспособности приложения изпользуйте [Postman](https://www.postman.com/downloads/)
 ## Improvement plans
 
 - Добавить авторизацию по YandexID
